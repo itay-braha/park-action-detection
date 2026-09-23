@@ -1,0 +1,18 @@
+# Lighter CSN-50 backbone (AVA 2.1 checkpoint, 27.2 mAP on AVA vs 31.1 for CSN-152).
+# ~2x faster; a good choice for quick experiments or real-time-ish inference.
+#   python tools/setup_tuber.py --weights csn50-ava21
+#   python train.py --config configs/park_csn50.yaml
+CONFIG:
+  DATA:
+    LABEL_PATH: "configs/park_actions.pbtxt"
+  MODEL:
+    BACKBONE_NAME: "CSN-50"
+  TRAIN:
+    BATCH_SIZE: 2
+  FINETUNE:
+    INIT_FROM: "weights/TubeR_CSN50_AVA21.pth"
+    HEAD_INIT_MAPPING: "configs/ava_to_park.yaml"
+    FREEZE_BACKBONE: "layer2"
+    GRAD_ACCUM: 4
+  LOG:
+    EXP_NAME: "park_csn50"

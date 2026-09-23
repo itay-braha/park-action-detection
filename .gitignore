@@ -1,0 +1,17 @@
+# environment
+.venv/
+__pycache__/
+*.pyc
+
+# downloaded / generated (re-created by setup scripts)
+third_party/
+weights/
+
+# DATA - never commit CCTV footage, frames or annotations of real people (privacy!)
+data/*
+!data/README.md
+outputs/
+runs/
+
+# notebooks: checkpoints only (executed notebooks themselves ARE committed)
+.ipynb_checkpoints/

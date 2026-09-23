@@ -1,0 +1,28 @@
+# Same as park_csn152_8gb.yaml but for a big Linux GPU (>= 24 GB, e.g. RTX 3090/4090/A5000/A100):
+# whole backbone trainable, larger batch, larger input for small/distant people.
+#   python train.py --config configs/park_csn152_24gb.yaml
+CONFIG:
+  DATA:
+    LABEL_PATH: "configs/park_actions.pbtxt"
+    IMG_SIZE: 320
+    IMG_RESHAPE_SIZE: 360
+    NUM_WORKERS: 8
+  MODEL:
+    BACKBONE_NAME: "CSN-152"
+    QUERY_NUM: 20
+  TRAIN:
+    EPOCH_NUM: 20
+    BATCH_SIZE: 4
+    LR: 1.0e-4
+    LR_BACKBONE: 1.0e-5
+    WARMUP_EPOCHS: 1
+    LR_MILESTONE: [12, 17]
+  FINETUNE:
+    INIT_FROM: "weights/TubeR_CSN152_AVA22.pth"
+    HEAD_INIT_MAPPING: "configs/ava_to_park.yaml"
+    FREEZE_BACKBONE: "stem"
+    FREEZE_BN: True
+    AMP: "bf16"
+    GRAD_ACCUM: 2
+  LOG:
+    EXP_NAME: "park_csn152_24gb"

@@ -1,0 +1,36 @@
+# How to initialise each park class from the AVA-trained classifier (TubeR's `class_fc` layer).
+#
+# <park class name>: [AVA action ids]   -> the new row = mean of those AVA rows (weights and bias)
+# Classes that are missing or have [] start from random init and must be learned from your data.
+#
+# Why: fine-tuning with a few hundred examples per class is much easier when the head already
+# "knows" walking from AVA. It also means the model is usable (zero-shot) before any training:
+#   python evaluate.py --config configs/park_csn152_8gb.yaml --checkpoint ""
+#
+# AVA ids (v2.1/v2.2 label map, the 60 evaluated ones):
+#   1 bend/bow  3 crouch/kneel  4 dance  5 fall down  6 get up  7 jump/leap  8 lie/sleep
+#   9 martial art  10 run/jog  11 sit  12 stand  13 swim  14 walk  15 answer phone
+#   17 carry/hold (an object)  20 climb  22 close  24 cut  26 dress/put on clothing  27 drink
+#   28 drive  29 eat  30 enter  34 hit (an object)  36 lift/pick up  37 listen (e.g. music)
+#   38 open  41 play musical instrument  43 point to (an object)  45 pull (an object)
+#   46 push (an object)  47 put down  48 read  49 ride (bike, car, horse)  51 sail boat  52 shoot
+#   54 smoke  56 take a photo  57 text on/look at a cellphone  58 throw  59 touch (an object)
+#   60 turn (e.g. screwdriver)  61 watch (e.g. TV)  62 work on a computer  63 write
+#   64 fight/hit (a person)  65 give/serve to a person  66 grab (a person)  67 hand clap
+#   68 hand shake  69 hand wave  70 hug (a person)  72 kiss (a person)  73 lift (a person)
+#   74 listen to (a person)  76 push (another person)  77 sing to  78 take from (a person)
+#   79 talk to (a person)  80 watch (a person)
+stand: [12]
+walk: [14]
+run: [10]
+sit: [11]
+lie_down: [8]
+bend_crouch: [1, 3]
+ride_bike_scooter: [49]
+fall_down: [5]
+fight_push: [64, 76, 66]
+throw: [58]
+carry_object: [17]
+talk_to_person: [79]
+use_phone: [57, 15]
+hug: [70]

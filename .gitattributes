@@ -1,0 +1,8 @@
+# Keep LF in the repo and in checkouts so setup.sh etc. work on Linux; PowerShell scripts use CRLF.
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.ipynb text eol=lf
+*.png binary
+*.jpg binary
+*.mp4 binary
+*.pth binary

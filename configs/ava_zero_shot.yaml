@@ -1,0 +1,11 @@
+# The original TubeR AVA model with its 80 AVA action classes - no fine-tuning.
+# Use it to see what TubeR does on your footage out of the box:
+#   python infer_video.py --config configs/ava_zero_shot.yaml --checkpoint "" --video my.mp4 --out outputs/zs
+CONFIG:
+  DATA:
+    LABEL_PATH: "third_party/assets/ava_action_list_v2.1_for_activitynet_2018.pbtxt"  # the 60 evaluated classes
+    NUM_CLASSES: 80
+  FINETUNE:
+    INIT_FROM: "weights/TubeR_CSN152_AVA22.pth"
+    HEAD_INIT_MAPPING: ""
+    AMP: "bf16"

@@ -1,0 +1,60 @@
+# Action classes for park CCTV footage - a STARTING POINT, edit freely.
+# Rules: ids are 1..N with no gaps; names have no spaces (they become CVAT attribute names);
+# keep the two-space indentation (the upstream reader is line-based).
+# After changing this file also update configs/ava_to_park.yaml and re-run tools/build_annotations.py.
+item {
+  name: "stand"
+  id: 1
+}
+item {
+  name: "walk"
+  id: 2
+}
+item {
+  name: "run"
+  id: 3
+}
+item {
+  name: "sit"
+  id: 4
+}
+item {
+  name: "lie_down"
+  id: 5
+}
+item {
+  name: "bend_crouch"
+  id: 6
+}
+item {
+  name: "ride_bike_scooter"
+  id: 7
+}
+item {
+  name: "fall_down"
+  id: 8
+}
+item {
+  name: "fight_push"
+  id: 9
+}
+item {
+  name: "throw"
+  id: 10
+}
+item {
+  name: "carry_object"
+  id: 11
+}
+item {
+  name: "talk_to_person"
+  id: 12
+}
+item {
+  name: "use_phone"
+  id: 13
+}
+item {
+  name: "hug"
+  id: 14
+}

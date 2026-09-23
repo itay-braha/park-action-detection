@@ -1,0 +1,35 @@
+# Fine-tune TubeR CSN-152 (AVA 2.2 checkpoint) on park footage - fits an 8 GB GPU (laptop RTX 4060/5060).
+# Only values that differ from the defaults in parktuber/config.py are listed; read that file for all keys.
+#   python train.py --config configs/park_csn152_8gb.yaml
+CONFIG:
+  DATA:
+    FRAMES_DIR: "data/frames"
+    TRAIN_ANNO: "data/annotations/train.json"
+    VAL_ANNO: "data/annotations/val.json"
+    LABEL_PATH: "configs/park_actions.pbtxt"
+    CLIP_FPS: 30
+    TEMP_LEN: 32
+    FRAME_RATE: 2
+    IMG_SIZE: 256
+    IMG_RESHAPE_SIZE: 288
+    NUM_WORKERS: 4
+  MODEL:
+    BACKBONE_NAME: "CSN-152"
+    QUERY_NUM: 15
+  TRAIN:
+    EPOCH_NUM: 20
+    BATCH_SIZE: 1
+    LR: 1.0e-4
+    LR_BACKBONE: 1.0e-5
+    WARMUP_EPOCHS: 1
+    LR_MILESTONE: [12, 17]
+  FINETUNE:
+    INIT_FROM: "weights/TubeR_CSN152_AVA22.pth"
+    HEAD_INIT_MAPPING: "configs/ava_to_park.yaml"
+    FREEZE_BACKBONE: "layer3"   # train only layer4 of the backbone + transformer + heads
+    FREEZE_BN: True
+    AMP: "bf16"                 # use "fp16" on GPUs older than RTX 30xx
+    GRAD_ACCUM: 8
+  LOG:
+    BASE_PATH: "runs"
+    EXP_NAME: "park_csn152_8gb"

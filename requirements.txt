@@ -1,0 +1,12 @@
+# Install PyTorch FIRST, matching your GPU/CUDA (see README / setup scripts), e.g.:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+# Tested: torch 2.11 + torchvision 0.26 (CUDA 12.8), Python 3.11, Windows 11 & Linux.
+yacs>=0.1.8           # TubeR's config system
+pyyaml>=6.0
+scipy>=1.10           # Hungarian matching (linear_sum_assignment), .mat backbone loading
+numpy>=1.24
+pandas>=2.0           # imported by upstream dataset code
+opencv-python>=4.8    # video decoding (bundles FFmpeg) + drawing
+pillow>=10.0
+tensorboard>=2.14     # training curves: tensorboard --logdir runs
+tqdm
