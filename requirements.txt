@@ -10,3 +10,9 @@ opencv-python>=4.8    # video decoding (bundles FFmpeg) + drawing
 pillow>=10.0
 tensorboard>=2.14     # training curves: tensorboard --logdir runs
 tqdm
+
+# --- for notebooks/TubeR_walkthrough.ipynb ---
+jupyterlab
+ipykernel
+matplotlib
+kiwisolver<1.5       # 1.5.x wheel DLL is blocked by Windows Smart App Control on some machines

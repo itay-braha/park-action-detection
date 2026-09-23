@@ -20,7 +20,8 @@ video ──► frames @30fps ──► 32-frame clip ──► TubeR (CSN-152 3
 
 | Path | What it is |
 |---|---|
-| [docs/](docs/) | **Start here if you want to understand things.** Six guides, listed below |
+| [notebooks/TubeR_walkthrough.ipynb](notebooks/TubeR_walkthrough.ipynb) | **Hands-on tour of TubeR**: every paper concept demonstrated on the real model, with outputs already saved |
+| [docs/](docs/) | Six written guides, listed below |
 | [parktuber/](parktuber/) | Our Python package: config, dataset, checkpoint loading, train/eval loops |
 | [train.py](train.py), [evaluate.py](evaluate.py), [infer_video.py](infer_video.py) | The three entry points |
 | [tools/](tools/) | Data pipeline: set up TubeR, extract frames, convert CVAT, build splits, preview |
@@ -29,6 +30,15 @@ video ──► frames @30fps ──► 32-frame clip ──► TubeR (CSN-152 3
 | `third_party/tubelet-transformer/` | Official TubeR code, downloaded and patched by `tools/setup_tuber.py` (not committed) |
 | `weights/` | Pretrained checkpoints (not committed) |
 | `data/` | Your videos, frames and annotations (git-ignored; see [data/README.md](data/README.md)) |
+
+### Learning path
+
+1. **[notebooks/TubeR_walkthrough.ipynb](notebooks/TubeR_walkthrough.ipynb)**, executed and saved, so you can
+   read it on GitHub or in VS Code without running anything. It takes the real model apart: clip sampling,
+   backbone shapes, the `avg`/`decode` bug side by side, query boxes, attention maps, Hungarian matching,
+   losses, AP, and a live fine-tuning run that proves the model uses motion. To re-run it (~5 min on 8 GB):
+   `jupyter lab notebooks/TubeR_walkthrough.ipynb` (kernel: the project's `.venv`).
+2. The docs below, for depth and reference.
 
 ### Documentation
 
