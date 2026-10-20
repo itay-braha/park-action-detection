@@ -1,10 +1,9 @@
-"""Which "other people" does LART see?  Measuring and fixing the context sampling.
+"""Which "other people" does LART see?
 
-PHALP_action_dataset gives the person-of-interest up to 4 other tracks, drawn uniformly at random from ALL tracks
-of the same 15-minute AVA video (`self.track2video[idx]`, then np.random.shuffle). A track lasts a few seconds,
-so most of those draws do not overlap it in time - their tokens are then empty ([MASK]) and the model gets no
-interaction signal. Here we compute each track's absolute frame interval and can restrict the candidates to tracks
-that are actually on screen at the same time ("co-occurring" sampling).
+PHALP_action_dataset groups tracks by file-name prefix `ava-val_<video>_<keyframe>`, i.e. by AVA *key frame*:
+the "others" of a person-of-interest are the other people tracked around the same annotated moment (so they are
+on screen at the same time). Up to max_people-1 = 4 of them are used; if there are more, 4 are drawn at random
+(np.random.shuffle - upstream evaluates unseeded, so crowded scenes make the score slightly random).
 """
 import json
 import os
@@ -27,7 +26,7 @@ def track_interval(path):
 
 
 def intervals_for(paths, cache=ROOT / "data" / "_TMP" / "track_intervals.json"):
-    """Frame intervals for many tracks, cached on disk (reading a track takes ~5 ms)."""
+    """Frame intervals for many tracks, cached on disk."""
     cache = Path(cache)
     known = json.loads(cache.read_text()) if cache.exists() else {}
     todo = [p for p in map(str, paths) if os.path.basename(p) not in known]
@@ -44,7 +43,7 @@ def overlap(a, b):
 
 
 def context_stats(ds, intervals):
-    """For each track: how many tracks of the same video exist, and how many overlap it in time."""
+    """Per track: number of other tracks at the same key frame, and how many of them overlap it in time."""
     n_same, n_overlap = [], []
     for path, others in zip(ds.data, ds.track2video):
         me = intervals[os.path.basename(str(path))]
@@ -52,15 +51,3 @@ def context_stats(ds, intervals):
         n_same.append(len(others))
         n_overlap.append(sum(overlap(me, x) > 0 for x in o))
     return np.array(n_same), np.array(n_overlap)
-
-
-def use_cooccurring_others(ds, intervals):
-    """Make the dataset draw 'other people' only among tracks that overlap the person-of-interest in time."""
-    new = []
-    for path, others in zip(ds.data, ds.track2video):
-        me = intervals[os.path.basename(str(path))]
-        keep = [x for x in others
-                if os.path.basename(str(x)) in intervals and overlap(me, intervals[os.path.basename(str(x))]) > 0]
-        new.append(keep)
-    ds.track2video = np.asarray(new + [[]], dtype=object)[:-1]   # keep a 1-D object array
-    return ds

@@ -93,7 +93,7 @@ class ablate_context:
 
 
 def ablate_other_people(inp, out, meta, name):
-    """Hide the (up to 4) other people in the scene: LART sees only the person being classified."""
+    """Hide the (up to 4) other people tracked at the same key frame: LART sees only the person being classified."""
     inp["has_detection"][:, 1:] = 0
     return inp, out
 
@@ -166,8 +166,8 @@ def evaluate(model, cfg, dataset, name, ablation=None, test_type="track.fullfram
     # then score against ALL of AVA val - we score ourselves (subset-aware) instead.
     model.on_validation_epoch_end = lambda: None
 
-    # Upstream evaluates with seed=None: which 4 "other people" a track sees is random, so the published mAP
-    # is one random draw. We seed it (and can measure the spread across seeds).
+    # When more than 4 other people share a key frame, PHALP_action_dataset picks 4 at random, and upstream
+    # evaluates with seed=None. We seed it (and can measure the spread across seeds).
     import functools
     np.random.seed(seed)
     loader = torch.utils.data.DataLoader(AblatedDataset(dataset, ablation), batch_size=batch_size,

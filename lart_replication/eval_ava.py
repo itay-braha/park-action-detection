@@ -61,7 +61,7 @@ def main():
     ap.add_argument("--batch-size", type=int, default=8)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--precision", default="32", help="32 (paper) or bf16-mixed")
-    ap.add_argument("--seed", type=int, default=0, help="seeds the random choice of other people (upstream: unseeded)")
+    ap.add_argument("--seed", type=int, default=0, help="seeds the choice of 4 others when >4 people share a key frame (upstream: unseeded)")
     ap.add_argument("--name", default="")
     args = ap.parse_args()
 

@@ -97,7 +97,8 @@ def main(cfg: DictConfig) -> Optional[float]:
     del tracker
 
     # pass 2: LART action recognition on every tracklet + rendering
-    cfg.render.enable = True
+    # LART_RENDER=0 skips the (slow) 3D-mesh video; the action predictions are saved either way
+    cfg.render.enable = os.environ.get("LART_RENDER", "1") == "1"
     cfg.render.colors = "slahmr"
     cfg.render.type = "GHOST_MESH"
     cfg.pose_predictor.config_path = f"{CACHE_DIR}/phalp/ava/lart_mvit.config"
