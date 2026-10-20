@@ -25,3 +25,6 @@ lart_replication/third_party/
 lart_replication/cache/
 lart_replication/SMPL_python_v*/
 lart_replication/**/*.pkl
+
+# run.py results (derived from CCTV footage - never commit)
+results/

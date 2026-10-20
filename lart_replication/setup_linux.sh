@@ -15,7 +15,7 @@ cd "$(dirname "$0")"
 SMPL=""
 while [[ $# -gt 0 ]]; do case "$1" in --smpl) SMPL="$2"; shift 2;; *) echo "unknown arg $1"; exit 1;; esac; done
 
-ENV_NAME=${ENV_NAME:-lart}
+ENV_NAME=${ENV_NAME:-cvproject}
 PY_VER=${PY_VER:-3.10}
 TORCH_SPEC=${TORCH_SPEC:-"torch==2.0.0 torchvision==0.15.1"}
 TORCH_INDEX=${TORCH_INDEX:-https://download.pytorch.org/whl/cu117}

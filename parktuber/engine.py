@@ -25,6 +25,8 @@ def autocast_ctx(cfg):
     amp = cfg.CONFIG.FINETUNE.AMP
     if amp == "none" or not torch.cuda.is_available():
         return contextlib.nullcontext()
+    if amp == "bf16" and not torch.cuda.is_bf16_supported():
+        amp = "fp16"          # pre-Ampere GPUs (e.g. Titan RTX, RTX 20xx, V100) have no bf16 -> use fp16
     return torch.autocast("cuda", dtype=torch.bfloat16 if amp == "bf16" else torch.float16)
 
 

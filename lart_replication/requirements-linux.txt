@@ -1,7 +1,7 @@
 # Pure-Python dependencies of LART + PHALP + 4D-Humans + SlowFast (installed by setup_linux.sh after PyTorch).
 # Compiled ones (detectron2, neural-renderer) are built separately against the installed torch.
-lightning>=2.0
-pytorch-lightning>=2.0
+lightning>=2.0,<2.3        # 2.0-2.2 support the PyTorch 2.0 used here
+pytorch-lightning>=2.0,<2.3
 hydra-core>=1.3
 hydra-submitit-launcher
 submitit

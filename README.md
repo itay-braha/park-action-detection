@@ -20,6 +20,15 @@ video ──► frames @30fps ──► 32-frame clip ──► TubeR (CSN-152 3
 > **[lart_replication/](lart_replication/README.md)**: setup, a fixed-up evaluation that reproduces the paper's
 > number, a walkthrough notebook, and a Linux video demo.
 
+## Running on long videos (both models)
+
+```bash
+python run.py --model tuber|lart --video /data/cam03_4h.mp4 --out results/cam03 --gpus 0,1
+```
+It cuts the video into chunks (the original is never modified), runs one chunk per GPU, can be resumed after an
+interruption, and writes `detections.csv` + `timeline.csv` in the same format for both models. See
+**[SERVER.md](SERVER.md)** for the step-by-step on the Linux GPU server (`setup_server.sh` installs both models).
+
 ## What is in here
 
 | Path | What it is |

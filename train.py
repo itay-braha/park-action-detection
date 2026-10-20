@@ -77,7 +77,12 @@ def main():
     optimizer = torch.optim.AdamW(param_groups(model, cfg), lr=cfg.CONFIG.TRAIN.LR,
                                   weight_decay=cfg.CONFIG.TRAIN.W_DECAY)
     scheduler = build_scheduler(optimizer, cfg, len(train_loader))
-    scaler = torch.amp.GradScaler("cuda", enabled=(cfg.CONFIG.FINETUNE.AMP == "fp16" and device.type == "cuda"))
+    use_scaler = device.type == "cuda" and (cfg.CONFIG.FINETUNE.AMP == "fp16" or
+                                            (cfg.CONFIG.FINETUNE.AMP == "bf16" and not torch.cuda.is_bf16_supported()))
+    try:
+        scaler = torch.amp.GradScaler("cuda", enabled=use_scaler)
+    except (AttributeError, TypeError):           # PyTorch < 2.3 (e.g. the 2.0 used for LART on the server)
+        scaler = torch.cuda.amp.GradScaler(enabled=use_scaler)
 
     start_epoch, best = 0, -1.0
     if args.resume:
