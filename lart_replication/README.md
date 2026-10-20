@@ -38,4 +38,10 @@ For the video demo on a Linux GPU server: `bash setup_linux.sh --smpl <path>` th
 
 ## Results
 
-RESULTS_PLACEHOLDER
+| | paper | ours (this repo, RTX 5060 laptop) |
+|---|---|---|
+| AVA v2.2 frame-mAP, all 64 val videos (97,148 tracks) | 45.1 | **45.11** (authors' own saved result: 45.105) |
+| person movement / object manipulation / person interaction | 63.8 / 37.3 / 45.7 | 63.8 / 37.3 / 45.7 |
+| per-class difference vs. the authors' saved result | | 0.04 mean, 0.36 max (60 classes) |
+
+Runtime: 2 h 24 min on one RTX 5060 Laptop GPU.
