@@ -15,3 +15,13 @@ runs/
 
 # notebooks: checkpoints only (executed notebooks themselves ARE committed)
 .ipynb_checkpoints/
+
+# LART replication: released AVA tracks (27 GB), checkpoints, licensed SMPL model, caches
+lart_replication/data/
+lart_replication/logs/
+lart_replication/smpl/
+lart_replication/outputs/
+lart_replication/third_party/
+lart_replication/cache/
+lart_replication/SMPL_python_v*/
+lart_replication/**/*.pkl

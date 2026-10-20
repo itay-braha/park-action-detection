@@ -1,0 +1,36 @@
+# Pure-Python dependencies of LART + PHALP + 4D-Humans + SlowFast (installed by setup_linux.sh after PyTorch).
+# Compiled ones (detectron2, neural-renderer) are built separately against the installed torch.
+lightning>=2.0
+pytorch-lightning>=2.0
+hydra-core>=1.3
+hydra-submitit-launcher
+submitit
+omegaconf
+pyrootutils
+rich
+einops
+timm
+joblib
+dill
+scikit-learn
+scikit-image
+smplx==0.1.28
+pyrender
+opencv-python
+av
+scenedetect[opencv]
+gdown
+webdataset
+yacs
+pandas
+fvcore
+iopath
+simplejson
+psutil
+tensorboard
+fairscale
+termcolor
+matplotlib
+torchmetrics
+# numpy < 2: several 2023-era deps (pyrender, older detectron2 builds) are not NumPy-2 ready
+numpy<2

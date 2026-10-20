@@ -154,7 +154,7 @@ def evaluate(model, criterion, loader, cfg, out_dir, epoch=0, writer=None, log=p
         pAP, _ = pev.evaluate()
     (out_dir / "evaluator_log.txt").write_text(buf.getvalue(), encoding="utf-8")
 
-    per_class = {k.split("/")[-1]: float(v) for k, v in metrics.items() if "PerformanceByCategory/AP" in k}
+    per_class = {k.split("IOU/", 1)[1]: float(v) for k, v in metrics.items() if "PerformanceByCategory/AP" in k}  # names may contain "/"
     result = {"mAP": float(mAP[0]), "person_AP": float(pAP[0]),
               "val_loss": float(np.mean(val_losses)) if val_losses else float("nan"), "per_class_AP": per_class}
     log(f"[eval epoch {epoch}] frame-mAP@0.5={result['mAP']:.4f}  person-AP@0.5={result['person_AP']:.4f}"

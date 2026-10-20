@@ -16,10 +16,15 @@ video ──► frames @30fps ──► 32-frame clip ──► TubeR (CSN-152 3
                           for each of 15 "queries":  P(person), box, P(walk), P(sit), P(run) ...
 ```
 
+> **Second paper: LART (CVPR 2023, 45.1 mAP on AVA).** The replication lives in
+> **[lart_replication/](lart_replication/README.md)**: setup, a fixed-up evaluation that reproduces the paper's
+> number, a walkthrough notebook, and a Linux video demo.
+
 ## What is in here
 
 | Path | What it is |
 |---|---|
+| [lart_replication/](lart_replication/README.md) | **LART** (Lagrangian action recognition with 3D pose + tracking): replication, notebook, demo |
 | [notebooks/TubeR_walkthrough.ipynb](notebooks/TubeR_walkthrough.ipynb) | **Hands-on tour of TubeR**: every paper concept demonstrated on the real model, with outputs already saved |
 | [docs/](docs/) | Six written guides, listed below |
 | [parktuber/](parktuber/) | Our Python package: config, dataset, checkpoint loading, train/eval loops |
