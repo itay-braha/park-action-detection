@@ -45,3 +45,7 @@ For the video demo on a Linux GPU server: `bash setup_linux.sh --smpl <path>` th
 | per-class difference vs. the authors' saved result | | 0.04 mean, 0.36 max (60 classes) |
 
 Runtime: 2 h 24 min on one RTX 5060 Laptop GPU.
+
+**Demo video** of these predictions on the real movie footage (LART's actions next to the human labels):
+`tools/render_ava_demo.py`. It downloads only a 46 s piece of AVA movie `z-fsLpGHq6o` (1:00 h of the original is
+1 GB); see the script's docstring for the two commands.
