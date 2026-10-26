@@ -14,9 +14,7 @@ If any of these fail, send the output to me (or to whoever runs the server). Ins
 
 ## 1. Get the code (once)
 ```bash
-$ git clone https://github.com/itay-braha/cv-park-action-detection.git CVProject
-#   private repo: when asked for a password, use a GitHub token (github.com/settings/tokens, scope "repo"),
-#   or run `gh auth login` on the server first (if gh is installed there)
+$ git clone https://github.com/itay-braha/park-action-detection.git CVProject      # public repo, no login needed
 $ cd CVProject
 ```
 Copy your licensed SMPL file to the server too (it's deliberately not in git). From your **laptop**:
