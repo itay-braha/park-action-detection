@@ -59,6 +59,11 @@ def main():
     ap.add_argument("--tuber-checkpoint", default="", help='"" = released AVA model (FINETUNE.INIT_FROM)')
     ap.add_argument("--lart-detector", default="vitdet", choices=["vitdet", "maskrcnn"],
                     help="vitdet = as in the paper (accurate, slow); maskrcnn = faster, misses small people")
+    ap.add_argument("--lart-min-box", default="20,40", type=lambda s: tuple(int(v) for v in s.split(",")),
+                    help="LART: ignore people smaller than W,H pixels (the authors' movie demo uses 100,200, which "
+                         "drops almost everyone in CCTV footage)")
+    ap.add_argument("--lart-low-mem", action="store_true",
+                    help="LART: MViT appearance features in fp16 (about half the memory), for GPUs with < 16 GB")
     ap.add_argument("--keep-frames", action="store_true", help="LART: keep the JPEG frames PHALP extracts")
     ap.add_argument("--python", default=sys.executable, help="interpreter for the model subprocesses")
     ap.add_argument("--merge-only", action="store_true", help="only rebuild the CSVs from finished chunks")

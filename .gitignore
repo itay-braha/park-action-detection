@@ -28,3 +28,6 @@ lart_replication/**/*.pkl
 
 # run.py results (derived from CCTV footage - never commit)
 results/
+
+# real footage dropped in locally (never commit)
+real_data/

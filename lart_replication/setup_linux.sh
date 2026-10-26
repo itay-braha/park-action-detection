@@ -51,8 +51,14 @@ python -m pip install -r requirements-linux.txt
 
 echo "== compiled packages (built against the torch above, hence --no-build-isolation)"
 export TORCH_CUDA_ARCH_LIST=${TORCH_CUDA_ARCH_LIST:-"$(python -c 'import torch;c=torch.cuda.get_device_capability();print(f"{c[0]}.{c[1]}")')"}
-python -m pip install --no-build-isolation "git+https://github.com/facebookresearch/detectron2.git"
-python -m pip install --no-build-isolation "git+https://github.com/shubham-goel/NMR.git"          # neural-renderer-pytorch
+python -c "import detectron2" 2>/dev/null ||
+    python -m pip install --no-build-isolation "git+https://github.com/facebookresearch/detectron2.git"
+# neural-renderer-pytorch: AT_DISPATCH_*(x.type(), ...) no longer compiles on PyTorch >= 2.2 -> x.scalar_type()
+if ! python -c "import neural_renderer" 2>/dev/null; then
+    rm -rf third_party/NMR && git clone -q https://github.com/shubham-goel/NMR.git third_party/NMR
+    sed -i -E 's/(AT_DISPATCH_[A-Z_]+\(\s*[A-Za-z_]+)\.type\(\)/\1.scalar_type()/' third_party/NMR/neural_renderer/cuda/*.cu
+    python -m pip install --no-build-isolation ./third_party/NMR
+fi
 python -m pip install --no-deps "git+https://github.com/facebookresearch/pytorchvideo.git"
 python -m pip install --no-deps "git+https://github.com/brjathu/SlowFast.git"                  # MViT feature extractor
 

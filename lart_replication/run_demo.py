@@ -89,8 +89,10 @@ cs.store(name="config", node=Human4DConfig)
 @hydra.main(version_base="1.2", config_name="config")
 def main(cfg: DictConfig) -> Optional[float]:
     # pass 1: track people in 3D
-    cfg.phalp.small_w = 100
-    cfg.phalp.small_h = 200
+    # people smaller than this (pixels) are ignored. 100x200 is the authors' demo setting for movies; CCTV people are
+    # often 20-60 px wide, so run.py passes a smaller size (--lart-min-box)
+    cfg.phalp.small_w = int(os.environ.get("LART_MIN_W", 100))
+    cfg.phalp.small_h = int(os.environ.get("LART_MIN_H", 200))
     cfg.render.enable = False
     tracker = HMR2_4dhuman(cfg)
     _, pkl_path = tracker.track()

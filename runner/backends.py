@@ -82,7 +82,14 @@ class LARTBackend:
 
     def run_chunk(self, chunk, out_dir, gpu):
         env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu), LART_RENDER="1" if self.opts.render else "0",
-                   PYOPENGL_PLATFORM=os.environ.get("PYOPENGL_PLATFORM", "egl"))
+                   PYOPENGL_PLATFORM=os.environ.get("PYOPENGL_PLATFORM", "egl"),
+                   # PyTorch >= 2.6 defaults torch.load to weights_only; the official HMR 2.0 / LART checkpoints
+                   # pickle OmegaConf configs, so they only load the old way
+                   TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD="1",
+                   LART_MIN_W=str(self.opts.lart_min_box[0]), LART_MIN_H=str(self.opts.lart_min_box[1]),
+                   PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True")
+        if self.opts.lart_low_mem:                        # MViT in fp16: about half the memory
+            env.update(LART_MVIT_FP16="1")
         cmd = [self.opts.python, LART_DIR / "run_demo.py", f"video.source={chunk}", f"video.output_dir={out_dir}",
                "video.end_frame=-1",                      # PHALP's default stops at frame 1300 (~43 s)!
                f"phalp.detector={self.opts.lart_detector}", f"hydra.run.dir={out_dir / 'hydra'}"]

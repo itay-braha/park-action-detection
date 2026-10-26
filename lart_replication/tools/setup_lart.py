@@ -63,7 +63,7 @@ DEMO_ASSETS = {
     "mvit.pyth": (f"{UT}/ava/mvit.pyth", "phalp/ava"),               # 1.7 GB, MViTv2 AVA feature extractor
 }
 AVA_ZIP = "https://research.google.com/ava/download/ava_v2.2.zip"     # official AVA v2.2 annotations
-HIERA_CKPT = "https://www.dropbox.com/s/aja2sfo9ge8hqxf/lart_hiera_001.tar.gz"  # 530 MB, the 45.1 mAP model
+HIERA_CKPT = "https://www.dropbox.com/s/aja2sfo9ge8hqxf/lart_hiera_001.tar.gz?dl=1"  # 530 MB, the 45.1 mAP model
 
 WEIGHTS_ONLY_FALSE = '__import__("functools").partial(torch.load, weights_only=False)('
 
@@ -90,6 +90,22 @@ PATCHES = [
      "np.bool was removed in NumPy 1.24 (AVA evaluator)"),
     ("LART", "lart/evaluators/ava.py", r"f = open\(csv_path, 'w'\)", "f = open(csv_path, 'w', newline='')",
      "csv.writer without newline='' writes blank rows on Windows -> AVA evaluator assertion"),
+    # MViT appearance features run attention over the whole 40-frame clip: ~15 GB at 312 px in fp32 (fine on the
+    # authors' 40 GB GPUs or a 24 GB Titan RTX). LART_MVIT_FP16=1 / LART_MVIT_CROP=256 make it fit 8 GB laptops;
+    # unset, the behaviour is unchanged.
+    ("LART", "lart/utils/wrapper_phalp.py",
+     r'cfg\.TEST\.CHECKPOINT_FILE_PATH=f"\{CACHE_DIR\}/phalp/ava/mvit\.pyth"(?!; )',
+     'cfg.TEST.CHECKPOINT_FILE_PATH=f"{CACHE_DIR}/phalp/ava/mvit.pyth"; '
+     'cfg.DATA.TEST_CROP_SIZE = int(__import__("os").environ.get("LART_MVIT_CROP", cfg.DATA.TEST_CROP_SIZE))',
+     "optional smaller MViT input (memory)"),
+    ("LART", "lart/utils/wrapper_phalp.py", r"with torch\.no_grad\(\):(?=\n\s+task_\s+= SlowFastWrapper)",
+     'with torch.no_grad(), torch.autocast("cuda", dtype=torch.float16, '
+     'enabled=__import__("os").environ.get("LART_MVIT_FP16") == "1"):',
+     "optional fp16 MViT (memory)"),
+    ("LART", "lart/utils/wrapper_phalp.py", r"task_\.action_preds\[0\]\n", "task_.action_preds[0].float()\n",
+     "fp16 outputs back to fp32"),
+    ("LART", "lart/utils/wrapper_phalp.py", r"task_\.action_preds\[1\]\n", "task_.action_preds[1].float()\n",
+     "fp16 outputs back to fp32"),
     ("LART", "lart/models/lart.py", r"https://people\.eecs\.berkeley\.edu/~jathushan/projects/lart/",
      "https://www.cs.utexas.edu/~pavlakos/lart-files-moved/",
      "dead host; the files are rebuilt locally by this script, so the URL is only a fallback that fails loudly"),
