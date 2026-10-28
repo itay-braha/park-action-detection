@@ -5,7 +5,7 @@
 set -eo pipefail     # no -u: conda's compiler (de)activate scripts read unset vars (ADDR2LINE, CONDA_BACKUP_*)
 cd "$(dirname "$0")"
 SMPL=""
-while [[ $# -gt 0 ]]; do case "$1" in --smpl) SMPL="$2"; shift 2;; *) echo "unknown arg $1"; exit 1;; esac; done
+while [[ $# -gt 0 ]]; do case "$1" in --smpl) SMPL="$(readlink -f "$2")"; shift 2;; *) echo "unknown arg $1"; exit 1;; esac; done
 [[ -n "$SMPL" && -f "$SMPL" ]] || { echo "usage: bash setup_server.sh --smpl /path/to/basicmodel_neutral_lbs_10_207_0_v1.1.0.pkl"; exit 1; }
 export ENV_NAME=${ENV_NAME:-cvproject}
 
