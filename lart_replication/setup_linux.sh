@@ -9,7 +9,7 @@
 #   check:  nvidia-smi ; nvcc --version ; gcc --version
 # Defaults = the versions the authors used (PyTorch 2.0 + CUDA 11.7): right for Titan RTX / RTX 20-40 / V100 / A100.
 # For H100 or RTX 50xx you need e.g. TORCH_SPEC="torch==2.7.1 torchvision==0.22.1" TORCH_INDEX=.../cu128 and CUDA 12.8.
-set -euo pipefail
+set -eo pipefail     # no -u: conda's compiler (de)activate scripts read unset vars (ADDR2LINE, CONDA_BACKUP_*)
 cd "$(dirname "$0")"
 
 SMPL=""
@@ -22,7 +22,7 @@ TORCH_INDEX=${TORCH_INDEX:-https://download.pytorch.org/whl/cu117}
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda env list | grep -q "^${ENV_NAME} " || conda create -y -n "$ENV_NAME" python="$PY_VER"
-set +u; conda activate "$ENV_NAME"; set -u    # conda's compiler activate scripts read unset vars (ADDR2LINE, ...)
+conda activate "$ENV_NAME"
 python -m pip install --upgrade pip wheel setuptools
 
 echo "== PyTorch ($TORCH_SPEC from $TORCH_INDEX)"

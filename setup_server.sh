@@ -2,7 +2,7 @@
 # One-time setup on the Linux GPU server, for BOTH models (TubeR + LART) in one conda env.
 #   bash setup_server.sh --smpl /path/to/basicmodel_neutral_lbs_10_207_0_v1.1.0.pkl
 # Takes ~30-60 min (compiles detectron2 + downloads ~12 GB of weights). Safe to re-run.
-set -euo pipefail
+set -eo pipefail     # no -u: conda's compiler (de)activate scripts read unset vars (ADDR2LINE, CONDA_BACKUP_*)
 cd "$(dirname "$0")"
 SMPL=""
 while [[ $# -gt 0 ]]; do case "$1" in --smpl) SMPL="$2"; shift 2;; *) echo "unknown arg $1"; exit 1;; esac; done
@@ -13,7 +13,7 @@ echo "######## 1/3  LART environment (PyTorch 2.0.1 + CUDA 11.7, detectron2, PHA
 TORCH_SPEC=${TORCH_SPEC:-"torch==2.0.1 torchvision==0.15.2"} bash lart_replication/setup_linux.sh --smpl "$SMPL"
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
-set +u; conda activate "$ENV_NAME"; set -u    # conda's compiler activate scripts read unset vars (ADDR2LINE, ...)
+conda activate "$ENV_NAME"
 echo "######## 2/3  TubeR (same env) ########"
 grep -vE "^(jupyterlab|ipykernel|kiwisolver)" requirements.txt > /tmp/req_tuber.txt
 python -m pip install -r /tmp/req_tuber.txt "numpy<2" imageio-ffmpeg
