@@ -22,7 +22,7 @@ TORCH_INDEX=${TORCH_INDEX:-https://download.pytorch.org/whl/cu117}
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda env list | grep -q "^${ENV_NAME} " || conda create -y -n "$ENV_NAME" python="$PY_VER"
-conda activate "$ENV_NAME"
+set +u; conda activate "$ENV_NAME"; set -u    # conda's compiler activate scripts read unset vars (ADDR2LINE, ...)
 python -m pip install --upgrade pip wheel setuptools
 
 echo "== PyTorch ($TORCH_SPEC from $TORCH_INDEX)"

@@ -13,7 +13,7 @@ echo "######## 1/3  LART environment (PyTorch 2.0.1 + CUDA 11.7, detectron2, PHA
 TORCH_SPEC=${TORCH_SPEC:-"torch==2.0.1 torchvision==0.15.2"} bash lart_replication/setup_linux.sh --smpl "$SMPL"
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate "$ENV_NAME"
+set +u; conda activate "$ENV_NAME"; set -u    # conda's compiler activate scripts read unset vars (ADDR2LINE, ...)
 echo "######## 2/3  TubeR (same env) ########"
 grep -vE "^(jupyterlab|ipykernel|kiwisolver)" requirements.txt > /tmp/req_tuber.txt
 python -m pip install -r /tmp/req_tuber.txt "numpy<2" imageio-ffmpeg
